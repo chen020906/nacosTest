@@ -19,6 +19,7 @@ public class Gateway01Application {
         System.out.println(222);
         System.out.println("slave ");
         System.out.println("master ");
+        System.out.println("slave2222 ");
 
     }
 
