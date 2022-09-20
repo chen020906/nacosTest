@@ -20,7 +20,7 @@ public class Gateway01Application {
         System.out.println("slave ");
         System.out.println("master ");
         System.out.println("slave2222 ");
-
+        System.out.println(" 修改");
     }
 
 }
