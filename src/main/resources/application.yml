@@ -1,0 +1,107 @@
+#启动端口
+server:
+  port: 80
+
+#spring boot actuator 监控端点
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      exposure:
+        include: '*'
+  health:
+    sentinel:
+      enabled: false
+
+
+spring:
+  application:
+    #服务名字
+    name: 01-nacos-discovery-gateway
+
+  cloud:
+    #服务注册发现的nacos
+    nacos:
+      discovery:
+        server-addr: 192.168.28.130:8848
+      password: nacos
+      username: nacos
+
+    #配置sentinel
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 192.168.28.130:8080
+
+      #配置持久化读取nacos中文件
+      datasource:
+        nacos1:
+          nacos:
+            server-addr: 192.168.28.130:8848
+            data-id: 01-nacos-discovery-gateway.json
+            group-id: DEFAULT_GROUP
+            rule-type: flow
+            data-type: json
+
+    #配置网关
+    gateway:
+      discovery:
+        locator:
+          enabled: true #启用DiscoveryClient网关集成，可以实现服务的发现
+
+      #配置网关路由转发规则
+      routes:
+        #- id: route0
+        #ri: http://localhost:8083
+        #predicates: #谓词：判断，是不是？对不对？是否匹配？
+        #- Path=/test, /index, /echo, /api
+
+        - id: route1
+          uri: lb://01-nacos-discovery-consumer
+          predicates: #谓词：判断，是不是？对不对？是否匹配？
+            - Path=/tests
+            #- After=2020-08-15T22:35:25.335+08:00[Asia/Shanghai]
+            #- Before=2020-09-15T17:35:25.335+08:00[Asia/Shanghai]
+            #- Between=2020-08-13T17:35:25.335+08:00[Asia/Shanghai], 2020-08-14T17:35:25.335+08:00[Asia/Shanghai]
+            #- Cookie=token, 123456
+            #- Header=X-Request-Id, \d+
+            #- Query=token
+            #            - Token=123456
+
+            #- AccessTime=下午6:00, 上午6:00
+          filters:
+            - AddRequestHeader=X-Request-red, blue
+            - AddRequestParameter=color, redd
+            - RequestLog=prefix, gateway #我们自定义的filter
+              #            - AccessTime=上午9:00,下午7:00
+
+              #        - id: route2
+              #          uri: lb://29-nacos-discovery-consumer
+              #          predicates:
+              #            - Path=/test*/**   # /test01/abc/123
+
+              #        - id: route3
+              #          uri: lb://29-nacos-discovery-provider
+              #          predicates:
+              #            - Path=/service/**
+              #- After=2020-10-15T17:35:25.335+08:00[Asia/Shanghai]
+              #- Before=2020-09-15T17:35:25.335+08:00[Asia/Shanghai]
+            #- Between=2020-08-13T17:35:25.335+08:00[Asia/Shanghai], 2020-08-15T17:35:25.335+08:00[Asia/Shanghai]
+            #- Cookie=token, ch.p
+            #- Header=X-Request-Id, \d+
+            #- Method=GET,POST
+#          filters:
+#            - AddRequestHeader=X-Request-Id, 12345
+
+
+
+
+
+
+
+
