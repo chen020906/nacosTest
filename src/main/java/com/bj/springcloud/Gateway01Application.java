@@ -16,6 +16,7 @@ public class Gateway01Application {
         ApplicationContext run = SpringApplication.run(Gateway01Application.class, args);
 
         System.out.println(111);
+        System.out.println(222);
 
     }
 
